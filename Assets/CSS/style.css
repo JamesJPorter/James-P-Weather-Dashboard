@@ -1,0 +1,35 @@
+:root {
+  --sandy-brown: #fcaa67ff;
+  --medium-carmine: #b0413eff;
+  --cream: #ffffc7ff;
+  --steel-teal: #548687ff;
+  --old-burgundy: #473335ff;
+}
+
+body {
+    background-color: var(--cream);
+    padding: 0px;
+    margin: 0px;
+    max-width: 100%;
+}
+
+#custom-header {
+  background-color: var(--steel-teal);
+  height: 50%;
+}
+
+#custom-h1 {
+    color: var(--cream)
+}
+
+#search-label {
+    color: var(--medium-carmine)
+}
+
+.forecast-card {
+    background-color: var(--steel-teal);
+    color: white;
+    padding: 10px;
+}
+
+

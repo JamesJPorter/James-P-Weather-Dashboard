@@ -1,7 +1,18 @@
 
 let citySearch = [];
 let userInput = [];
-let userInputFormatted = [];
+let coordinates = {
+    resultsLat: [],
+    resultsLon: []
+};
+let stringCoords = {
+    lat: [], 
+    long: []
+}
+let formattedCoords = {
+    lat: [], 
+    long: []
+}
 let searchResult = [];
 
 $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
@@ -42,10 +53,31 @@ function fetchDataByCity(city){
 }
 
 function fetchDataByCoords(coords){
-    console.log(citySearch[0].lon)
+    console.log(coords)
+    console.log(coords[0].lat)
+    console.log(coords[0].lon)
     for (var i = 0; i < coords.length; i++){
-        fetch('api.openweathermap.org/data/2.5/forecast?lat=' + coords[i].lat + '&lon=' + coords[i].lon + '&appid=214f0628b63be875d9fcdd939008692a')
+        coordinates.resultsLat[i] = coords[i].lat.toString()
+        console.log(coordinates)
+        stringCoords.lat.push(coordinates.resultsLat[i])
+        console.log("stringCoords", stringCoords)
+        formattedCoords.lat[i] = Number(stringCoords.lat[i].slice(0, 5))
+        console.log("formattedCoords", formattedCoords)
+        
+
+        coordinates.resultsLon[i] = coords[i].lon.toString()
+        console.log(coordinates)
+        stringCoords.long.push(coordinates.resultsLon[i])
+        console.log("stringCoords", stringCoords)
+        formattedCoords.long[i] = Number(stringCoords.long[i].slice(0, 5))
+        console.log("formattedCoords", formattedCoords)
+        //let newCoordinates = coordinates.resultsLat[i].slice(3, 10)
+    }
+    for (var i = 0; i < coords.length; i++){
+        console.log(formattedCoords.lat[i])
+        fetch('api.openweathermap.org/data/2.5/forecast?lat=' + formattedCoords.lat[i] + '&lon=' + formattedCoords.long[i] + '&appid=2d3b3bc21074396280d510a4956a8fe6')
     .then((response) => response.json())
+    console.log(response)
     .then((data) => {
         searchResult.push(data)
         console.log(data)

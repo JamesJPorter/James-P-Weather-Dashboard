@@ -15,13 +15,14 @@ let formattedCoords = {
 };
 let searchResult;
 let searchResultForUse;
+let searches; 
 
 // let tempK;
 // let tempF;
 
 function inIt() {
   userInputSaved = [];
-  userInputSaved.push(JSON.parse(localStorage.getItem("Searches")));
+  userInputSaved.push(JSON.parse(localStorage.getItem("searches")));
   console.log(userInputSaved);
 }
 
@@ -37,14 +38,14 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
     userInput = userInput.split(",");
     // userInputFormatted = userInputFormatted.push(userInput);
     userInputSaved.push(userInput);
-    localStorage.setItem("Searches", JSON.stringify(userInputSaved));
+    localStorage.setItem("searches", JSON.stringify(userInputSaved));
   } else if (userInput === "") {
     userInputSaved.push(userInput);
-    localStorage.setItem("Searches", JSON.stringify(userInputSaved));
+    localStorage.setItem("searches", JSON.stringify(userInputSaved));
   } else {
     //userInputFormatted = userInputFormatted.push(userInput);
     userInputSaved.push(userInput);
-    localStorage.setItem("Searches", JSON.stringify(userInputSaved));
+    localStorage.setItem("searches", JSON.stringify(userInputSaved));
   }
   console.log(userInput);
   console.log(userInputSaved);

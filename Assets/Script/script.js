@@ -1,4 +1,3 @@
-
 let citySearch = [];
 let userInput = [];
 let coordinates = {
@@ -24,10 +23,6 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
         userInput = userInput.split(",");
        // userInputFormatted = userInputFormatted.push(userInput);
         localStorage.setItem("Searches", JSON.stringify(userInputFormatted));
-      } else if (userInput.indexOf(" ") !== -1) {
-        userInput = userInput.split(" ");
-        //userInputFormatted = userInputFormatted.push(userInput);
-        localStorage.setItem("Searches", JSON.stringify(userInput));
       } else if (userInput === "") {
         localStorage.setItem("Searches", JSON.stringify(userInput));
       } else {
@@ -41,7 +36,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
 
 
 function fetchDataByCity(city){
-    fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + city +  '&limit=5&appid=214f0628b63be875d9fcdd939008692a')
+    fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + city +  '&limit=1&appid=214f0628b63be875d9fcdd939008692a')
     .then ((response) => response.json())
     .then((data) => {
         citySearch = data
@@ -63,25 +58,23 @@ function fetchDataByCoords(coords){
         console.log("stringCoords", stringCoords)
         formattedCoords.lat[i] = Number(stringCoords.lat[i].slice(0, 5))
         console.log("formattedCoords", formattedCoords)
-        
-
         coordinates.resultsLon[i] = coords[i].lon.toString()
         console.log(coordinates)
         stringCoords.long.push(coordinates.resultsLon[i])
         console.log("stringCoords", stringCoords)
-        formattedCoords.long[i] = Number(stringCoords.long[i].slice(0, 5))
+        formattedCoords.long[i] = Number(stringCoords.long[i].slice(0, 4))
         console.log("formattedCoords", formattedCoords)
         //let newCoordinates = coordinates.resultsLat[i].slice(3, 10)
     }
     for (var i = 0; i < coords.length; i++){
         console.log(formattedCoords.lat[i])
-        fetch('api.openweathermap.org/data/2.5/forecast?lat=' + formattedCoords.lat[i] + '&lon=' + formattedCoords.long[i] + '&appid=2d3b3bc21074396280d510a4956a8fe6')
+        // fetch('http://api.openweathermap.org/geo/1.0/reverse?lat=' + formattedCoords.lat[i] + '&lon=' + formattedCoords.long[i] + '&limit=1&appid=2d3b3bc21074396280d510a4956a8fe6')
+        fetch ('api.openweathermap.org/data/2.5/forecast?lat=' + formattedCoords.lat[i]+ '&lon=' + formattedCoords.long[i] + '&appid=214f0628b63be875d9fcdd939008692a')
     .then((response) => response.json())
-    console.log(response)
     .then((data) => {
         searchResult.push(data)
         console.log(data)
         console.log(searchResult)
-        localStorage.setItem("SavedSearches", JSON.stringify(searchResults))
+        localStorage.setItem("SavedSearches", JSON.stringify(searchResult))
     })}
 }

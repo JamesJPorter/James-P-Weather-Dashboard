@@ -1,6 +1,6 @@
 let citySearch = [];
 let userInput = [];
-let userInputSaved;
+let userInputSaved = [];
 let coordinates = {
   resultsLat: [],
   resultsLon: [],
@@ -20,14 +20,17 @@ let searches;
 // let tempK;
 // let tempF;
 
+//initialize local storage 
 function inIt() {
   userInputSaved = [];
   userInputSaved.push(JSON.parse(localStorage.getItem("searches")));
   console.log(userInputSaved);
+//   fetchDataByCity(userInputSaved[])
 }
 
 inIt();
 
+//grab and format user input on click of the submit button
 $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   event.preventDefault();
   console.log(userInputSaved);
@@ -53,6 +56,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   fetchDataByCity(userInput);
 });
 
+//run an openWeather fetch based upon user input
 function fetchDataByCity(city) {
   fetch(
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -69,6 +73,7 @@ function fetchDataByCity(city) {
     });
 }
 
+//fetch data by the coordinates contained within the initial user city name based search
 function fetchDataByCoords(coords) {
   console.log(coords);
   console.log(coords[0].lat);
@@ -107,14 +112,15 @@ function fetchDataByCoords(coords) {
         searchResultForUse = JSON.parse(
           localStorage.getItem("searchResult", searchResult)
         );
-        kelvinToFarenheit(searchResultForUse);
+        kelvinToFahrenheit(searchResultForUse);
         mPStoMPH(searchResultForUse);
         console.log("searchResultForUse", searchResultForUse);
       });
   }
 }
 
-function kelvinToFarenheit(results) {
+//convert temperature from Kelvin to Fahrenheit and return to original object as new property
+function kelvinToFahrenheit(results) {
   //searchResultForUse = JSON.parse(localStorage.getItem("searchResult", searchResult))
   for (var i = 0; i < results.list.length; i++) {
     //console.log("results", results);
@@ -132,6 +138,7 @@ function kelvinToFarenheit(results) {
   console.log("searchResultForUse", results);
 }
 
+//convert wind speed from meters/second to MPH and return to original object as new property
 function mPStoMPH(results) {
   //searchResultForUse = JSON.parse(localStorage.getItem("searchResult", searchResult))
   for (var i = 0; i < results.list.length; i++) {
@@ -145,9 +152,12 @@ function mPStoMPH(results) {
   showForecast();
 }
 
+//print search results with 5 day forecast on the screen 
 function showForecast() {
+    //stage our variables for use in front end population
   let processedResults = JSON.parse(localStorage.getItem("searchResult"));
   console.log(processedResults);
+
   //Banner for search results
   let bannerDate = processedResults.list[3].dt_txt;
   bannerDate = bannerDate.split(" ");
@@ -169,6 +179,7 @@ function showForecast() {
   $("#wind").text("Wind: " + processedResults.list[3].wind.windMphFDisp);
   $("#Humidity").text("Humidity: " + processedResults.list[3].main.humidity + "%");
 
+    //Loop through list to populate 5 day forecast
   console.log(processedResults.list.length);
   for (var i = 0; i < processedResults.list.length; i + 7) {
     let forecastCard = $("<div>");

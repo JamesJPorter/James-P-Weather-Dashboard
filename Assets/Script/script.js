@@ -55,23 +55,23 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
 function fetchDataByCity(city) {
   fetch(
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
-      city +
-      "&limit=1&appid=214f0628b63be875d9fcdd939008692a"
+    city +
+    "&limit=1&appid=214f0628b63be875d9fcdd939008692a"
   )
     .then((response) => response.json())
     .then((data) => {
       citySearch = data;
-        console.log(data);
-        console.log(citySearch);
+      console.log(data);
+      console.log(citySearch);
       //   console.log(citySearch[0].lon);
       fetchDataByCoords(citySearch);
     });
 }
 
 function fetchDataByCoords(coords) {
-    console.log(coords);
-    console.log(coords[0].lat);
-    console.log(coords[0].lon);
+  console.log(coords);
+  console.log(coords[0].lat);
+  console.log(coords[0].lon);
   for (var i = 0; i < coords.length; i++) {
     coordinates.resultsLat[i] = coords[i].lat.toString();
     console.log(coordinates);
@@ -92,10 +92,10 @@ function fetchDataByCoords(coords) {
     // fetch('http://api.openweathermap.org/geo/1.0/reverse?lat=' + formattedCoords.lat[i] + '&lon=' + formattedCoords.long[i] + '&limit=1&appid=2d3b3bc21074396280d510a4956a8fe6')
     fetch(
       "http://api.openweathermap.org/data/2.5/forecast?lat=" +
-        formattedCoords.lat[i] +
-        "&lon=" +
-        formattedCoords.long[i] +
-        "&appid=214f0628b63be875d9fcdd939008692a"
+      stringCoords.lat[i] +
+      "&lon=" +
+      stringCoords.long[i] +
+      "&appid=214f0628b63be875d9fcdd939008692a"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -141,8 +141,42 @@ function mPStoMPH(results) {
   }
   localStorage.setItem("searchResult", JSON.stringify(results));
   console.log("windResults", results);
+  showForecast()
 }
 
-function showForecast(userInputSaved){
+function showForecast() {
+  let processedResults = JSON.parse(localStorage.getItem('searchResult'))
+  console.log(processedResults)
+  let forecastCard = $("<div>")
+  forecastCard.attr("class", "col-2 border forecast-card mx-2")
+  $("#5dayContainer").append(forecastCard)
 
+  let dateContainer = $("<div>")
+  dateContainer.attr("class", "date-container h3")
+  let dateSpan = $("<span>")
+  dateSpan.text(processedResults.list[3].dt)
+  dateContainer.append(dateSpan)
+  forecastCard.append(dateContainer)
+
+  let tempContainer = $("<div>")
+  tempContainer.attr("class", "temp-container")
+  let tempSpan = $("<span>")
+  tempSpan.text(processedResults.list[3].main.tempFDisp)
+  tempContainer.append(tempSpan)
+  forecastCard.append(tempContainer)
+
+  let windContainer = $("<div>")
+  windContainer.attr("class", "wind")
+  let windSpan = $("<span>")
+  windSpan.text(processedResults.list[3].wind.windMphFDisp)
+  windContainer.append(windSpan)
+  forecastCard.append(windContainer)
+
+  let humidityContainer = $("<div>")
+  humidityContainer.attr('class', 'humidity')
+  let humiditySpan = $("<span>")
+  humiditySpan.text(processedResults.list[3].main.humidity)
+  humidityContainer.append(humiditySpan)
+  forecastCard.append(humidityContainer)
 }
+

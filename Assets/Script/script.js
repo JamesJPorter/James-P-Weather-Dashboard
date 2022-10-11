@@ -164,9 +164,10 @@ function showForecast() {
   $("#city-name-date").text(
     processedResults.city.name + " (" + bannerDate + ")"
   );
-  $("#temp").text(processedResults.list[3].main.tempFDisp);
-  $("#wind").text(processedResults.list[3].wind.windMphFDisp);
-  $("#Humidity").text(processedResults.list[3].main.humidity + "%");
+  $("#city-name-date").append(bannerIconImg)
+  $("#temp").text("Temp: " + processedResults.list[3].main.tempFDisp + ' F');
+  $("#wind").text("Wind: " + processedResults.list[3].wind.windMphFDisp);
+  $("#Humidity").text("Humidity: " + processedResults.list[3].main.humidity + "%");
 
   console.log(processedResults.list.length);
   for (var i = 0; i < processedResults.list.length; i + 7) {
@@ -207,7 +208,7 @@ function showForecast() {
     let tempContainer = $("<div>");
     tempContainer.attr("class", "temp-container");
     let tempSpan = $("<span>");
-    tempSpan.text(processedResults.list[i].main.tempFDisp);
+    tempSpan.text("Temp: " + processedResults.list[i].main.tempFDisp + ' F');
     tempContainer.append(tempSpan);
     forecastCard.append(tempContainer);
 
@@ -216,7 +217,7 @@ function showForecast() {
     let windContainer = $("<div>");
     windContainer.attr("class", "wind");
     let windSpan = $("<span>");
-    windSpan.text(processedResults.list[i].wind.windMphFDisp);
+    windSpan.text("Wind: " + processedResults.list[i].wind.windMphFDisp);
     windContainer.append(windSpan);
     forecastCard.append(windContainer);
 
@@ -225,11 +226,10 @@ function showForecast() {
     let humidityContainer = $("<div>");
     humidityContainer.attr("class", "humidity");
     let humiditySpan = $("<span>");
-    humiditySpan.text(processedResults.list[i].main.humidity + "%");
+    humiditySpan.text("Humidity: " + processedResults.list[i].main.humidity + "%");
     humidityContainer.append(humiditySpan);
     forecastCard.append(humidityContainer);
     console.log("end of loop");
   }
-  return;
   console.log("exited loop");
 }

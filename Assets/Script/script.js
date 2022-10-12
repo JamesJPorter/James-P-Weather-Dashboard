@@ -171,7 +171,7 @@ function showForecast(results) {
   console.log(results.list.length);
   for (var i = 0; i < results.list.length; i = i + 8) {
     let forecastCard = $("<div>");
-    forecastCard.attr("class", "col-2 border forecast-card mx-2");
+    forecastCard.attr("class", "col-lg-2 border forecast-card mx-2");
     forecastContainer.append(forecastCard);
 
     let dateContainer = $("<div>");

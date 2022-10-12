@@ -22,13 +22,14 @@ forecastContainer.attr({ class: "row mt-2", id: "5dayContainer" });
 
 //initialize local storage
 function inIt() {
-  if (!localStorage){
-    userInputSaved = [];
-  } else {
-    userInputSaved = (localStorage.getItem("userHistory"))
-    if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1] && userInputSaved.forEach(printSearchHistory) && console.log('if is running'))
-  }
+  userInputSaved = JSON.parse(localStorage.getItem("userHistory")) || [];
   console.log(userInputSaved);
+  console.log(userInputSaved[userInputSaved.length - 1]);
+  if (userInputSaved.length > 0) {
+    fetchDataByCity(userInputSaved[userInputSaved.length - 1]) &&
+      userInputSaved.forEach(printSearchHistory) &&
+      console.log("if is running");
+  }
 }
 
 inIt();
@@ -37,7 +38,7 @@ inIt();
 $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   event.preventDefault();
   console.log(userInputSaved);
-  userInput = $("#citySearchI").val()
+  userInput = $("#citySearchI").val();
   console.log($("#citySearchI"));
   console.log(userInput);
   forecastContainer.remove();
@@ -45,7 +46,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   //   forecastCard.remove();
   // }
   userInputSaved.push(userInput);
-  localStorage.setItem("userHistory", userInputSaved);
+  localStorage.setItem("userHistory", JSON.stringify(userInputSaved));
   console.log(userInput);
   console.log(userInputSaved);
   fetchDataByCity(userInput);
@@ -217,5 +218,3 @@ function printSearchHistory(inputArr) {
     SearchHistoryCol.append(searchHistoryBtn);
   }
 }
-
-printSearchHistory(testArr);

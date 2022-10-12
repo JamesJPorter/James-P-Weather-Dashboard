@@ -22,9 +22,13 @@ forecastContainer.attr({ class: "row mt-2", id: "5dayContainer" });
 
 //initialize local storage
 function inIt() {
-  userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
+  if (!localStorage){
+    userInputSaved = [];
+  } else {
+    userInputSaved = (localStorage.getItem("userHistory"))
+    if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1] && userInputSaved.forEach(printSearchHistory) && console.log('if is running'))
+  }
   console.log(userInputSaved);
-  if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1] && userInputSaved.forEach(printSearchHistory) && console.log('if is running'))
 }
 
 inIt();
@@ -41,7 +45,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   //   forecastCard.remove();
   // }
   userInputSaved.push(userInput);
-  localStorage.setItem("userInputSaved", userInputSaved);
+  localStorage.setItem("userHistory", userInputSaved);
   console.log(userInput);
   console.log(userInputSaved);
   fetchDataByCity(userInput);

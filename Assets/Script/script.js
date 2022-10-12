@@ -18,14 +18,13 @@ let searchResultForUse;
 let searches;
 let forecastContainer = $("<div>");
 forecastContainer.attr({ class: "row mt-2", id: "5dayContainer" });
-let forecastCard = $("<div>");
+// let forecastCard = $("<div>");
 
 //initialize local storage
 function inIt() {
-  //userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
+  userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
   console.log(userInputSaved);
-  //if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
-  //userInputSaved.forEach(printSearchHistory)
+  if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1] && userInputSaved.forEach(printSearchHistory) && console.log('if is running'))
 }
 
 inIt();
@@ -38,10 +37,10 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   console.log($("#citySearchI"));
   console.log(userInput);
   forecastContainer.remove();
-  for (var i = 0; i < 5; i++) {
-    forecastCard.remove();
-  }
-  //userInputSaved.push(userInput);
+  // for (var i = 0; i < 5; i++) {
+  //   forecastCard.remove();
+  // }
+  userInputSaved.push(userInput);
   localStorage.setItem("userInputSaved", userInputSaved);
   console.log(userInput);
   console.log(userInputSaved);
@@ -140,7 +139,7 @@ function showForecast(results) {
   //Loop through list to populate 5 day forecast
   console.log(results.list.length);
   for (var i = 0; i < results.list.length; i = i + 8) {
-    forecastCard = $("<div>");
+    let forecastCard = $("<div>");
     forecastCard.attr("class", "col-2 border forecast-card mx-2");
     forecastContainer.append(forecastCard);
 

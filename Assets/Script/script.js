@@ -15,16 +15,17 @@ let formattedCoords = {
 };
 let searchResult;
 let searchResultForUse;
-let searches; 
-let forecastContainer = $("<div>")
-forecastContainer.attr({class: "row mt-2", id: "5dayContainer"})
+let searches;
+let forecastContainer = $("<div>");
+forecastContainer.attr({ class: "row mt-2", id: "5dayContainer" });
 let forecastCard = $("<div>");
 
-//initialize local storage 
+//initialize local storage
 function inIt() {
-  userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
+  //userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
   console.log(userInputSaved);
-  if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
+  //if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
+  //userInputSaved.forEach(printSearchHistory)
 }
 
 inIt();
@@ -33,15 +34,15 @@ inIt();
 $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   event.preventDefault();
   console.log(userInputSaved);
-  userInput = $("#citySearchI").val();
+  userInput = $("#citySearchI").val()
   console.log($("#citySearchI"));
   console.log(userInput);
-  forecastContainer.remove()
-  for (var i = 0; i < 5; i++){
-    forecastCard.remove()
+  forecastContainer.remove();
+  for (var i = 0; i < 5; i++) {
+    forecastCard.remove();
   }
-  userInputSaved.push(userInput)
-  localStorage.setItem("userInputSaved", userInputSaved)
+  //userInputSaved.push(userInput);
+  localStorage.setItem("userInputSaved", userInputSaved);
   console.log(userInput);
   console.log(userInputSaved);
   fetchDataByCity(userInput);
@@ -49,9 +50,9 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
 
 //run an openWeather fetch based upon user input
 function fetchDataByCity(city) {
-  console.log(city)
+  console.log(city);
   fetch(
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.openweathermap.org/geo/1.0/direct?q=" +
       city +
       "&limit=1&appid=214f0628b63be875d9fcdd939008692a"
   )
@@ -67,27 +68,27 @@ function fetchDataByCity(city) {
 
 //fetch data by the coordinates contained within the initial user city name based search
 function fetchDataByCoords(coords) {
-  console.log('coords.length', coords.length);
-  console.log(coords)
+  console.log("coords.length", coords.length);
+  console.log(coords);
   console.log(coords[0].lat);
   console.log(coords[0].lon);
-    fetch(
-      "http://api.openweathermap.org/data/2.5/forecast?lat=" +
+  fetch(
+    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
       coords[0].lat +
-        "&lon=" +
-        coords[0].lon +
-        "&appid=214f0628b63be875d9fcdd939008692a"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        searchResult = data;
-        console.log("searchResult", searchResult);
+      "&lon=" +
+      coords[0].lon +
+      "&appid=214f0628b63be875d9fcdd939008692a"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      searchResult = data;
+      console.log("searchResult", searchResult);
 
-        kelvinToFahrenheit(searchResult);
-        mPStoMPH(searchResult);
-        console.log("searchResult", searchResult);
-      });
- // }
+      kelvinToFahrenheit(searchResult);
+      mPStoMPH(searchResult);
+      console.log("searchResult", searchResult);
+    });
+  // }
 }
 
 //convert temperature from Kelvin to Fahrenheit and return to original object as new property
@@ -114,7 +115,7 @@ function mPStoMPH(results) {
   showForecast(results);
 }
 
-//print search results with 5 day forecast on the screen 
+//print search results with 5 day forecast on the screen
 function showForecast(results) {
   //Banner for search results
   let bannerDate = results.list[3].dt_txt;
@@ -129,16 +130,14 @@ function showForecast(results) {
       ".png",
     alt: "Weather icon",
   });
-  $("#city-name-date").text(
-    results.city.name + " (" + bannerDate + ")"
-  );
-  $("#city-name-date").append(bannerIconImg)
-  $("#temp").text("Temp: " + results.list[3].main.tempFDisp + ' F');
+  $("#city-name-date").text(results.city.name + " (" + bannerDate + ")");
+  $("#city-name-date").append(bannerIconImg);
+  $("#temp").text("Temp: " + results.list[3].main.tempFDisp + " F");
   $("#wind").text("Wind: " + results.list[3].wind.windMphFDisp);
   $("#Humidity").text("Humidity: " + results.list[3].main.humidity + "%");
-  $(".weather-report").append(forecastContainer)
+  $(".weather-report").append(forecastContainer);
 
-    //Loop through list to populate 5 day forecast
+  //Loop through list to populate 5 day forecast
   console.log(results.list.length);
   for (var i = 0; i < results.list.length; i = i + 8) {
     forecastCard = $("<div>");
@@ -172,7 +171,7 @@ function showForecast(results) {
     let tempContainer = $("<div>");
     tempContainer.attr("class", "temp-container");
     let tempSpan = $("<span>");
-    tempSpan.text("Temp: " + results.list[i].main.tempFDisp + ' F');
+    tempSpan.text("Temp: " + results.list[i].main.tempFDisp + " F");
     tempContainer.append(tempSpan);
     forecastCard.append(tempContainer);
 
@@ -189,7 +188,31 @@ function showForecast(results) {
     humiditySpan.text("Humidity: " + results.list[i].main.humidity + "%");
     humidityContainer.append(humiditySpan);
     forecastCard.append(humidityContainer);
-    
- }
-  
+  }
 }
+
+let testArr = ["Los Angeles", "Denver", "San Diego"];
+
+function printSearchHistory(inputArr) {
+  let searchContainer = $("#citySearchContainer");
+
+  for (var i = 0; i < inputArr.length; i++) {
+    let searchHistoryEl = $("<div>");
+    searchHistoryEl.attr("class", "row");
+    searchContainer.append(searchHistoryEl);
+
+    let SearchHistoryCol = $("<div>");
+    SearchHistoryCol.attr("class", "col-lg-12 mt-2");
+    searchHistoryEl.append(SearchHistoryCol);
+
+    let searchHistoryBtn = $("<button>");
+    searchHistoryBtn.attr({
+      class: "col-lg-12 savedSearchBtn",
+      for: "city-search",
+    });
+    searchHistoryBtn.text(inputArr[i]);
+    SearchHistoryCol.append(searchHistoryBtn);
+  }
+}
+
+printSearchHistory(testArr);

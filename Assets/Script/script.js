@@ -1,6 +1,6 @@
 let citySearch = [];
 let userInput = [];
-let userInputSaved = [];
+let userInputSaved;
 let coordinates = {
   resultsLat: [],
   resultsLon: [],
@@ -16,16 +16,18 @@ let formattedCoords = {
 let searchResult;
 let searchResultForUse;
 let searches; 
+let forecastContainer = $("<div>")
+forecastContainer.attr({class: "row mt-2", id: "5dayContainer"})
+let forecastCard = $("<div>");
 
 // let tempK;
 // let tempF;
 
 //initialize local storage 
 function inIt() {
-  userInputSaved = [];
-  userInputSaved.push(JSON.parse(localStorage.getItem("searches")));
+  userInputSaved = (localStorage.getItem("userInputSaved")) || [];
   console.log(userInputSaved);
-//   fetchDataByCity(userInputSaved[])
+  if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
 }
 
 inIt();
@@ -37,22 +39,14 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   userInput = $("#citySearchI").val();
   console.log($("#citySearchI"));
   console.log(userInput);
-  if (userInput.indexOf(",") !== -1) {
-    userInput = userInput.split(",");
-    // userInputFormatted = userInputFormatted.push(userInput);
-    userInputSaved.push(userInput);
-    localStorage.setItem("searches", JSON.stringify(userInputSaved));
-  } else if (userInput === "") {
-    userInputSaved.push(userInput);
-    localStorage.setItem("searches", JSON.stringify(userInputSaved));
-  } else {
-    //userInputFormatted = userInputFormatted.push(userInput);
-    userInputSaved.push(userInput);
-    localStorage.setItem("searches", JSON.stringify(userInputSaved));
+  forecastContainer.remove()
+  for (var i = 0; i < 5; i++){
+    forecastCard.remove()
   }
+  //userInputSaved.push(userInput)
+  localStorage.setItem("userInputSaved", userInputSaved)
   console.log(userInput);
   console.log(userInputSaved);
-  //console.log(userInputFormatted)
   fetchDataByCity(userInput);
 });
 
@@ -75,7 +69,7 @@ function fetchDataByCity(city) {
 
 //fetch data by the coordinates contained within the initial user city name based search
 function fetchDataByCoords(coords) {
-  console.log(coords);
+  console.log('coords.length', coords.length);
   console.log(coords[0].lat);
   console.log(coords[0].lon);
   for (var i = 0; i < coords.length; i++) {
@@ -112,9 +106,9 @@ function fetchDataByCoords(coords) {
         searchResultForUse = JSON.parse(
           localStorage.getItem("searchResult", searchResult)
         );
-        kelvinToFahrenheit(searchResultForUse);
-        mPStoMPH(searchResultForUse);
-        console.log("searchResultForUse", searchResultForUse);
+        kelvinToFahrenheit(searchResult);
+        mPStoMPH(searchResult);
+        console.log("searchResult", searchResult);
       });
   }
 }
@@ -134,7 +128,7 @@ function kelvinToFahrenheit(results) {
     results.list[i].main.tempFDisp = tempFDisp;
     //console.log(results.list[i].main.tempFDisp);
   }
-  localStorage.setItem("searchResult", JSON.stringify(results));
+  // localStorage.setItem("searchResult", JSON.stringify(results));
   console.log("searchResultForUse", results);
 }
 
@@ -147,7 +141,7 @@ function mPStoMPH(results) {
     windMphFDisp = windMphFDisp.slice(0, 4);
     results.list[i].wind.windMphFDisp = windMphFDisp + " MPH";
   }
-  localStorage.setItem("searchResult", JSON.stringify(results));
+  // localStorage.setItem("searchResult", JSON.stringify(results));
   console.log("windResults", results);
   showForecast();
 }
@@ -178,13 +172,14 @@ function showForecast() {
   $("#temp").text("Temp: " + processedResults.list[3].main.tempFDisp + ' F');
   $("#wind").text("Wind: " + processedResults.list[3].wind.windMphFDisp);
   $("#Humidity").text("Humidity: " + processedResults.list[3].main.humidity + "%");
+  $(".weather-report").append(forecastContainer)
 
     //Loop through list to populate 5 day forecast
   console.log(processedResults.list.length);
-  for (var i = 0; i < processedResults.list.length; i + 7) {
-    let forecastCard = $("<div>");
+  for (var i = 0; i < processedResults.list.length; i = i + 8) {
+    forecastCard = $("<div>");
     forecastCard.attr("class", "col-2 border forecast-card mx-2");
-    $("#5dayContainer").append(forecastCard);
+    forecastContainer.append(forecastCard);
 
     console.log("after forecast card");
 
@@ -241,6 +236,6 @@ function showForecast() {
     humidityContainer.append(humiditySpan);
     forecastCard.append(humidityContainer);
     console.log("end of loop");
-  }
+ }
   console.log("exited loop");
 }

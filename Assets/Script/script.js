@@ -40,7 +40,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   for (var i = 0; i < 5; i++){
     forecastCard.remove()
   }
-  //userInputSaved.push(userInput)
+  userInputSaved.push(userInput)
   localStorage.setItem("userInputSaved", userInputSaved)
   console.log(userInput);
   console.log(userInputSaved);
@@ -49,6 +49,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
 
 //run an openWeather fetch based upon user input
 function fetchDataByCity(city) {
+  console.log(city)
   fetch(
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
       city +

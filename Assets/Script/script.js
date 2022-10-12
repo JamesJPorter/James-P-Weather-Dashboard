@@ -26,9 +26,9 @@ function inIt() {
   console.log(userInputSaved);
   console.log(userInputSaved[userInputSaved.length - 1]);
   if (userInputSaved.length > 0) {
-    fetchDataByCity(userInputSaved[userInputSaved.length - 1])
+    fetchDataByCity(userInputSaved[userInputSaved.length - 1]);
   }
-  printSearchHistory(userInputSaved)
+  printSearchHistory(userInputSaved);
 }
 
 inIt();
@@ -43,28 +43,37 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   // for (var i = 0; i < 5; i++) {
   //   forecastCard.remove();
   // }
-  userInputSaved.push(userInput);
-  localStorage.setItem("userHistory", JSON.stringify(userInputSaved));
+
+  if (userInputSaved.includes(userInput)){
+    userInputSaved = userInputSaved
+  } else {
+    userInputSaved.push(userInput);
+    localStorage.setItem("userHistory", JSON.stringify(userInputSaved))
+  }
   console.log(userInput);
   console.log(userInputSaved);
-  printSearchHistory(userInputSaved)
+  printSearchHistory(userInputSaved);
   fetchDataByCity(userInput);
 });
 
 $("#citySearchContainer").on("click", ".savedSearchBtn", function (event) {
   event.preventDefault();
   console.log(userInputSaved);
-  userInput = $(".savedSearchBtn").text();
+  userInput = event.target.textContent;
   console.log($(".savedSearchBtn"));
   console.log(userInput);
   // for (var i = 0; i < 5; i++) {
   //   forecastCard.remove();
   // }
-  userInputSaved.push(userInput);
-  localStorage.setItem("userHistory", JSON.stringify(userInputSaved));
+  if (userInputSaved.includes(userInput)){
+    userInputSaved = userInputSaved
+  } else {
+    userInputSaved.push(userInput);
+    localStorage.setItem("userHistory", JSON.stringify(userInputSaved))
+  }
   console.log(userInput);
   console.log(userInputSaved);
-  printSearchHistory(userInputSaved)
+  printSearchHistory(userInputSaved);
   fetchDataByCity(userInput);
 });
 
@@ -217,7 +226,7 @@ let testArr = ["Los Angeles", "Denver", "San Diego"];
 function printSearchHistory(inputArr) {
   let searchContainer = $("#citySearchContainer");
   let searchHistoryEl = $("<div>");
-  $(".history").remove()
+  $(".history").remove();
 
   for (var i = 0; i < inputArr.length; i++) {
     searchHistoryEl.attr("class", "row history");
@@ -231,7 +240,7 @@ function printSearchHistory(inputArr) {
     searchHistoryBtn.attr({
       class: "col-lg-12 savedSearchBtn",
       for: "city-search",
-      id: `${inputArr[i]}`
+      id: `${inputArr[i]}`,
     });
     searchHistoryBtn.text(inputArr[i]);
     SearchHistoryCol.append(searchHistoryBtn);

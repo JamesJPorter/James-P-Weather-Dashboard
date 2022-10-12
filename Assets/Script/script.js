@@ -22,7 +22,7 @@ let forecastCard = $("<div>");
 
 //initialize local storage 
 function inIt() {
-  userInputSaved = (localStorage.getItem("userInputSaved")) || [];
+  userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
   console.log(userInputSaved);
   if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
 }

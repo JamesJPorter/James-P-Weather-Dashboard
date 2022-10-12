@@ -22,7 +22,7 @@ let forecastCard = $("<div>");
 
 //initialize local storage 
 function inIt() {
-  userInputSaved = (localStorage.getItem("userInputSaved")) || [];
+  userInputSaved = JSON.parse((localStorage.getItem("userInputSaved"))) || [];
   console.log(userInputSaved);
   if (userInputSaved.length > 0) fetchDataByCity(userInputSaved[userInputSaved.length-1])
 }
@@ -40,7 +40,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   for (var i = 0; i < 5; i++){
     forecastCard.remove()
   }
-  //userInputSaved.push(userInput)
+  userInputSaved.push(userInput)
   localStorage.setItem("userInputSaved", userInputSaved)
   console.log(userInput);
   console.log(userInputSaved);
@@ -49,6 +49,7 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
 
 //run an openWeather fetch based upon user input
 function fetchDataByCity(city) {
+  console.log(city)
   fetch(
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
       city +

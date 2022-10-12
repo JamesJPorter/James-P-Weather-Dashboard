@@ -26,10 +26,9 @@ function inIt() {
   console.log(userInputSaved);
   console.log(userInputSaved[userInputSaved.length - 1]);
   if (userInputSaved.length > 0) {
-    fetchDataByCity(userInputSaved[userInputSaved.length - 1]) &&
-      userInputSaved.forEach(printSearchHistory) &&
-      console.log("if is running");
+    fetchDataByCity(userInputSaved[userInputSaved.length - 1])
   }
+  printSearchHistory(userInputSaved)
 }
 
 inIt();
@@ -41,7 +40,6 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   userInput = $("#citySearchI").val();
   console.log($("#citySearchI"));
   console.log(userInput);
-  forecastContainer.remove();
   // for (var i = 0; i < 5; i++) {
   //   forecastCard.remove();
   // }
@@ -49,6 +47,24 @@ $("#citySearchContainer").on("click", "#weatherSubmitBtn", function (event) {
   localStorage.setItem("userHistory", JSON.stringify(userInputSaved));
   console.log(userInput);
   console.log(userInputSaved);
+  printSearchHistory(userInputSaved)
+  fetchDataByCity(userInput);
+});
+
+$("#citySearchContainer").on("click", ".savedSearchBtn", function (event) {
+  event.preventDefault();
+  console.log(userInputSaved);
+  userInput = $(".savedSearchBtn").text();
+  console.log($(".savedSearchBtn"));
+  console.log(userInput);
+  // for (var i = 0; i < 5; i++) {
+  //   forecastCard.remove();
+  // }
+  userInputSaved.push(userInput);
+  localStorage.setItem("userHistory", JSON.stringify(userInputSaved));
+  console.log(userInput);
+  console.log(userInputSaved);
+  printSearchHistory(userInputSaved)
   fetchDataByCity(userInput);
 });
 
@@ -122,6 +138,7 @@ function mPStoMPH(results) {
 //print search results with 5 day forecast on the screen
 function showForecast(results) {
   //Banner for search results
+  $(".forecast-card").remove();
   let bannerDate = results.list[3].dt_txt;
   bannerDate = bannerDate.split(" ");
   bannerDate = moment(bannerDate[0]).format("MM/DD/YYYY");
@@ -199,10 +216,11 @@ let testArr = ["Los Angeles", "Denver", "San Diego"];
 
 function printSearchHistory(inputArr) {
   let searchContainer = $("#citySearchContainer");
+  let searchHistoryEl = $("<div>");
+  $(".history").remove()
 
   for (var i = 0; i < inputArr.length; i++) {
-    let searchHistoryEl = $("<div>");
-    searchHistoryEl.attr("class", "row");
+    searchHistoryEl.attr("class", "row history");
     searchContainer.append(searchHistoryEl);
 
     let SearchHistoryCol = $("<div>");
@@ -213,6 +231,7 @@ function printSearchHistory(inputArr) {
     searchHistoryBtn.attr({
       class: "col-lg-12 savedSearchBtn",
       for: "city-search",
+      id: `${inputArr[i]}`
     });
     searchHistoryBtn.text(inputArr[i]);
     SearchHistoryCol.append(searchHistoryBtn);
